@@ -34,8 +34,8 @@ export const fetchCards = async (id) => {
 
 export const fetchCreateCategory = async (data) => {
   try {
-    const response = await fetch(`${API_URL}/api/category/${id}`, {
-      method: "post",  
+    const response = await fetch(`${API_URL}/api/category/`, {
+      method: "POST",
       body: JSON.stringify(data),
     });
 
@@ -51,10 +51,10 @@ export const fetchCreateCategory = async (data) => {
   }
 };
 
-export const fetchEditCategory = async (data) => {
+export const fetchEditCategory = async (id, data) => {
   try {
     const response = await fetch(`${API_URL}/api/category/${id}`, {
-      method: "patch",
+      method: "PATCH",
       body: JSON.stringify(data),
     });
 
@@ -73,7 +73,7 @@ export const fetchEditCategory = async (data) => {
 export const fetchDeleteCategory = async (id) => {
   try {
     const response = await fetch(`${API_URL}/api/category/${id}`, {
-      method: "delete",
+      method: "DELETE",
     });
 
     if (!(response.status === 200 || response.status === 201)) {

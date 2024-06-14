@@ -8,6 +8,7 @@ import {
   fetchCards,
   fetchCategories,
   fetchCreateCategory,
+  fetchDeleteCategory,
   fetchEditCategory,
 } from "./service/api.service.js";
 
@@ -24,9 +25,9 @@ const initApp = async () => {
     [categoryObj, editCategoryObj, pairsObj].forEach((obj) => obj.unmount());
   };
 
-  const postHandler = () => {
+  const postHandler = async () => {
     const data = editCategoryObj.parseData();
-    const dataCategories = fetchCreateCategory(data);
+    const dataCategories = await fetchCreateCategory(data);
     if (dataCategories.error) {
       showAlert(dataCategories.error.message);
       return;
@@ -38,9 +39,9 @@ const initApp = async () => {
     categoryObj.mount(dataCategories);
   };
 
-  const patchHandler = () => {
+  const patchHandler = async () => {
     const data = editCategoryObj.parseData();
-    const dataCategories = fetchEditCategory(
+    const dataCategories = await fetchEditCategory(
       editCategoryObj.btnSave.dataset.id,
       data
     );
@@ -97,7 +98,18 @@ const initApp = async () => {
       return;
     }
     if (target.closest(".category__del")) {
-      console.log("Видалити");
+      if (confirm("Ви впевнені, що хочете видалити категорію")) {
+        const result = fetchDeleteCategory(categoryItem.dataset.id);
+
+        if (result.error) {
+          showAlert(result.error.message);
+          return;
+        }
+
+        showAlert("Категорія видалена!");
+        categoryItem.remove();
+      }
+
       return;
     }
 

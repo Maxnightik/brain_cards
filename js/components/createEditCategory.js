@@ -1,8 +1,8 @@
 import { createElement } from "../helper/createElement.js";
 
-export const createEditCategory = () => {
-  const TITLE = "введіть назву категорії";
+const TITLE = "введіть назву категорії";
 
+export const createEditCategory = (app) => {
   const editCategory = createElement("section", {
     className: "edit section-offset",
   });
@@ -104,13 +104,13 @@ export const createEditCategory = () => {
   };
 
   const clearTitle = () => {
-    if ((title.textContent = TITLE)) {
+    if (title.textContent === TITLE) {
       title.textContent = "";
     }
   };
 
   const checkTitle = () => {
-    if ((title.textContent = "")) {
+    if (title.textContent === "") {
       title.textContent = TITLE;
     }
   };
@@ -120,7 +120,6 @@ export const createEditCategory = () => {
 
   btnAddRow.addEventListener("click", () => {
     const emptyRow = createTRCell(["", ""]);
-
     tbody.append(emptyRow);
   });
 
@@ -161,12 +160,12 @@ export const createEditCategory = () => {
 
     const rows = data.pairs.map(createTRCell);
     const emptyRow = createTRCell(["", ""]);
+
     tbody.append(...rows, emptyRow);
 
     btnSave.dataset.id = data.id ? data.id : "";
 
     app.append(editCategory);
-    parseData(); // !todo del
   };
 
   const unmount = () => {
