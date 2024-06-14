@@ -2,7 +2,7 @@ import { createCategory } from "./components/createCategory.js";
 import { createEditCategory } from "./components/createEditCategory.js";
 import { createHeader } from "./components/createHeader.js";
 import { createElement } from "./helper/createElement.js";
-import { fetchCategories } from "./service/api.service.js";
+import { fetchCards, fetchCategories } from "./service/api.service.js";
 
 const initApp = async () => {
   const headerParent = document.querySelector(".header");
@@ -40,6 +40,18 @@ const initApp = async () => {
     allSectionUnmount();
     headerObj.upadateHeaderTitle("Нова Категорія");
     editCategoryObj.mount();
+  });
+
+  categoryObj.categoryList.addEventListener("click", async ({ target }) => {
+    const categoryItem = target.closest(".category__item");
+
+    if (target.closest(".category__edit")) {
+      const dataCards = await fetchCards(categoryItem.dataset.id);
+      allSectionUnmount();
+      headerObj.upadateHeaderTitle("Редагування");
+      editCategoryObj.mount(dataCards);
+      return;
+    }
   });
 };
 
