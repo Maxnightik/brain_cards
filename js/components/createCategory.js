@@ -16,6 +16,8 @@ export const createCategory = (app) => {
     className: "category__list",
   });
 
+  container.append(categoryList);
+
   const createCategoryCard = (data) => {
     const item = createElement("li", {
       className: "category__item",
@@ -54,8 +56,6 @@ export const createCategory = (app) => {
     return item;
   };
 
-  container.append(categoryList);
-
   const mount = (data) => {
     categoryList.textContent = "";
     const cards = data.map(createCategoryCard);
@@ -63,7 +63,7 @@ export const createCategory = (app) => {
     app.append(category);
   };
 
-  const unmount = (data) => {
+  const unmount = () => {
     category.remove();
   };
 

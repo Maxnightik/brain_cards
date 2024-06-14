@@ -1,4 +1,6 @@
 import { createElement } from "../helper/createElement.js";
+import { shuffleArray } from "../helper/shuffleArray.js";
+import { showAlert } from "./showAlert.js";
 
 export const createPairs = (app) => {
   const pairs = createElement("section", {
@@ -43,12 +45,12 @@ export const createPairs = (app) => {
           index += 1;
           if (index === data.length) {
             front.textContent = "the end";
+            showAlert("Повернемось до категорій", 2000);
             setTimeout(() => {
               buttonReturn.click();
             }, 2000);
             return;
           }
-
           front.textContent = data[index][0];
           back.textContent = data[index][1];
           setTimeout(() => {
@@ -63,7 +65,8 @@ export const createPairs = (app) => {
 
   const mount = (data) => {
     app.append(pairs);
-    cardControler(data.pairs);
+    const newDate = shuffleArray(data.pairs);
+    cardControler(newDate);
   };
 
   const unmount = () => {
