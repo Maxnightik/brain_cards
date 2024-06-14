@@ -1,8 +1,8 @@
 import { createElement } from "../helper/createElement.js";
 
-export const createEditCategory = () => {
-  const TITLE = "введіть назву категорії";
+const TITLE = "введіть назву категорії";
 
+export const createEditCategory = (app) => {
   const editCategory = createElement("section", {
     className: "edit section-offset",
   });
@@ -49,12 +49,12 @@ export const createEditCategory = () => {
     textContent: "Додати пару",
   });
 
-  const btnAddSave = createElement("button", {
+  const btnSave = createElement("button", {
     className: "edit__btn edit__save",
     textContent: "Зберегти",
   });
 
-  const btnAddCancel = createElement("button", {
+  const btnCancel = createElement("button", {
     className: "edit__btn edit__cancel",
     textContent: "Відміна",
   });
@@ -63,19 +63,19 @@ export const createEditCategory = () => {
   table.append(thead, tbody);
   thead.append(trThead);
   trThead.append(tableHeadCellMain, tableHeadCellSecond, tableHeadCellEmpty);
-  btnWrapper.append(btnAddRow, btnAddSave, btnAddCancel);
+  btnWrapper.append(btnAddRow, btnSave, btnCancel);
   container.append(title, table, btnWrapper);
 
   const createTRCell = (dataArr) => {
     const tr = createElement("tr");
 
-    const tableCellMain = createElement("th", {
+    const tableCellMain = createElement("td", {
       className: "table__cell table__cell_one",
       textContent: dataArr[0],
       contentEditable: true,
     });
 
-    const tableCellSecond = createElement("th", {
+    const tableCellSecond = createElement("td", {
       className: "table__cell table__cell_two",
       textContent: dataArr[1],
       contentEditable: true,
@@ -104,13 +104,13 @@ export const createEditCategory = () => {
   };
 
   const clearTitle = () => {
-    if ((title.textContent = TITLE)) {
+    if (title.textContent === TITLE) {
       title.textContent = "";
     }
   };
 
   const checkTitle = () => {
-    if ((title.textContent = "")) {
+    if (title.textContent === "") {
       title.textContent = TITLE;
     }
   };
@@ -120,9 +120,33 @@ export const createEditCategory = () => {
 
   btnAddRow.addEventListener("click", () => {
     const emptyRow = createTRCell(["", ""]);
-
     tbody.append(emptyRow);
   });
+
+  const parseData = () => {
+    const cellsMain = document.querySelectorAll(".table__cell_one");
+    const cellsSecond = document.querySelectorAll(".table__cell_two");
+
+    const data = {
+      pairs: [],
+    };
+
+    for (let i = 0; i < cellsMain.length; i += 1) {
+      const textMain = cellsMain[i].textContent.trim();
+      const textSecond = cellsSecond[i].textContent.trim();
+      if (textMain && textSecond) {
+        data.pairs[i] = [textMain, textSecond];
+      }
+    }
+    if (title.textContent.trim() && title.textContent !== TITLE) {
+      data.title = title.textContent.trim();
+    }
+
+    if (btnSave.dataset.id) {
+      data.id = btnSave.dataset.id;
+    }
+    return data;
+  };
 
   const mount = (data = { title: TITLE, pairs: [] }) => {
     tbody.textContent = "";
@@ -136,7 +160,10 @@ export const createEditCategory = () => {
 
     const rows = data.pairs.map(createTRCell);
     const emptyRow = createTRCell(["", ""]);
+
     tbody.append(...rows, emptyRow);
+
+    btnSave.dataset.id = data.id ? data.id : "";
 
     app.append(editCategory);
   };
@@ -145,5 +172,5 @@ export const createEditCategory = () => {
     editCategory.remove();
   };
 
-  return { mount, unmount };
+  return { mount, unmount, parseData, btnSave, btnCancel };
 };
